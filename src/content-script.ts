@@ -54,8 +54,8 @@ port.onMessage.addListener(function (msg: UpdateDOMWithOpenRetoolTabs) {
     // Modify <button data-action-url="*retool*"> buttons.
     // This is what Intercom buttons look like.
     const retoolButtons = [
-      ...document.querySelectorAll("button[data-action-url*='retool']"),
-      ...document.querySelectorAll("button[hidden-url*='retool']"),
+      ...document.querySelectorAll("button[data-action-url*='carbon.greenly.earth']"),
+      ...document.querySelectorAll("button[hidden-url*='carbon.greenly.earth']"),
     ];
     retoolButtons.forEach((button) => {
       const buttonURL =

@@ -37,10 +37,23 @@ async function navigateToTab(tab: chrome.tabs.Tab): Promise<void> {
 
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   if (changeInfo.url) {
+    if (!changeInfo.url.includes(GREENLY_SAAS_URL)) {
+      return
+    }
+    
+    if (tab.pendingUrl === tab.url) {
+      return
+    }
     const openTabs = await getOpenGreenlyTabs()
+    console.log(`RetoolQuickOpen: looking for tab with URL ${changeInfo.url}...`)
+
     const targetTab = findTabByURL(openTabs, new URL(changeInfo.url))
 
     if (targetTab) {
+      if (targetTab.id === tabId) {
+        return
+      }
+      console.log(`RetoolQuickOpen: tab found! ${targetTab.id}`)
       await navigateToTab(targetTab)
     }
   }

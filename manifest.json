@@ -15,13 +15,6 @@
   "background": {
     "service_worker": "dist/service-worker.js"
   },
-  "content_scripts": [
-    {
-      "matches": ["http://*/*", "https://*/*"],
-      "js": ["dist/content-script.js"],
-      "all_frames": true
-    }
-  ],
   "permissions": ["tabs"],
   "host_permissions": ["<all_urls>"]
 }

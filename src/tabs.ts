@@ -1,6 +1,6 @@
 const pageURLs = [
-  'https://carbon.greenly.earth/apps/Client%20App%20-%20Company%20Information/Greenly%20-%20Data%20-%20Company%20Information?_embed=true&_environment=prod-auth0',
   'https://carbon.greenly.earth/apps/Client%20App%20-%20Dashboard/Greenly%20-%20Dashboard?_embed=true',
+  'https://carbon.greenly.earth/apps/Client%20App%20-%20Company%20Information/Greenly%20-%20Data%20-%20Company%20Information?_embed=true&_environment=prod-auth0',
   'https://carbon.greenly.earth/apps/Client%20App%20-%20Building/Buildings?_embed=true',
   'https://carbon.greenly.earth/apps/Client%20App%20-%20Employees/Employees?_embed=true',
   'https://carbon.greenly.earth/apps/Client%20App%20-%20File%20Uploader/Greenly%20-%20Data%20-%20File%20Uploader?_embed=true',
@@ -20,8 +20,13 @@ const pageURLs = [
   'https://carbon.greenly.earth/apps/Client%20App%20-%20Settings/Greenly%20-%20Settings?_embed=true#currentView=0',
 ];
 
-const openTabs = async () => {
-  pageURLs.forEach(url => chrome.tabs.create({url}))
+const openURLsInTabs = async () => {
+  console.log('Opening all URLs...')
+  const tabs = await Promise.all(pageURLs.map(url => chrome.tabs.create({url})))
+  const tabIds = tabs.map(t => t.id ? t.id : -1);
+  console.log(`GreenlyDemoCompanion: Just opened the following tabs: ${tabIds.join(', ')}`)
+  const group = await chrome.tabs.group({ tabIds });
+  await chrome.tabGroups.update(group, { title: "Demo" });
 }
 
 const setupBtn = document.getElementById('btn-setup');
@@ -30,4 +35,4 @@ if (!setupBtn) {
   throw new Error('Unable to find the "Setup Demo" button, there is something wrong in the popup.');
 }
 
-setupBtn.addEventListener('click', openTabs)
+setupBtn.addEventListener('click', openURLsInTabs)

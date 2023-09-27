@@ -10,11 +10,13 @@ async function getOpenGreenlyTabs():Promise<chrome.tabs.Tab[]> {
   return allTabs.filter((tab) => tab.url?.includes(GREENLY_SAAS_URL));
 }
 
-function findTabByURL(openTabs: chrome.tabs.Tab[], url: URL) {
-  return openTabs.find((tab) => {
-    const tabUrl = new URL(tab.url ? tab.url : '');
-    return tabUrl.hostname === url.hostname && tabUrl.pathname === url.pathname;
-  });
+function findTabByURL(openTabs: chrome.tabs.Tab[], url: URL, excludeId: number) {
+  return openTabs
+    .filter(t => t.id !== excludeId)
+    .find((tab) => {
+      const tabUrl = new URL(tab.url ? tab.url : '');
+      return tabUrl.hostname === url.hostname && tabUrl.pathname === url.pathname;
+    });
 }
 
 async function navigateToTab(tab: chrome.tabs.Tab): Promise<void> {
@@ -29,31 +31,22 @@ async function navigateToTab(tab: chrome.tabs.Tab): Promise<void> {
     return
   }
 
-  console.log('RetoolQuickOpen: tab exists, navigate to it.')
+  console.log('GreenlyDemoCompanion: tab exists, navigate to it.')
   chrome.tabs.update(tab.id, {
     active: true,
   });
+  await chrome.windows.update(tab.windowId, { focused: true });
 }
 
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   if (changeInfo.url) {
-    if (!changeInfo.url.includes(GREENLY_SAAS_URL)) {
-      return
-    }
-    
-    if (tab.pendingUrl === tab.url) {
-      return
-    }
     const openTabs = await getOpenGreenlyTabs()
-    console.log(`RetoolQuickOpen: looking for tab with URL ${changeInfo.url}...`)
+    console.log(`GreenlyDemoCompanion: looking for tab with URL ${changeInfo.url}...`)
 
-    const targetTab = findTabByURL(openTabs, new URL(changeInfo.url))
+    const targetTab = findTabByURL(openTabs, new URL(changeInfo.url), tabId)
 
     if (targetTab) {
-      if (targetTab.id === tabId) {
-        return
-      }
-      console.log(`RetoolQuickOpen: tab found! ${targetTab.id}`)
+      console.log(`GreenlyDemoCompanion: tab found! ${targetTab.id}`)
       await navigateToTab(targetTab)
     }
   }

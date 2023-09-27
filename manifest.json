@@ -15,6 +15,6 @@
   "background": {
     "service_worker": "dist/service-worker.js"
   },
-  "permissions": ["tabs"],
+  "permissions": ["tabs", "tabGroups"],
   "host_permissions": ["<all_urls>"]
 }

@@ -48,6 +48,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     if (targetTab) {
       console.log(`GreenlyDemoCompanion: tab found! ${targetTab.id}`)
       await navigateToTab(targetTab)
+      await chrome.scripting.executeScript({target: {tabId}, func: () => { window.stop(); history.back() }, injectImmediately: true})
     }
   }
 })

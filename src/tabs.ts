@@ -1,6 +1,6 @@
 const pageURLs = [
   'https://carbon.greenly.earth/apps/Client%20App%20-%20Dashboard/Greenly%20-%20Dashboard?_embed=true',
-  'https://carbon.greenly.earth/apps/Client%20App%20-%20Company%20Information/Greenly%20-%20Data%20-%20Company%20Information?_embed=true&_environment=prod-auth0',
+  'https://carbon.greenly.earth/apps/Client%20App%20-%20Company%20Information/Greenly%20-%20Data%20-%20Company%20Information?_embed=true',
   'https://carbon.greenly.earth/apps/Client%20App%20-%20Building/Buildings?_embed=true',
   'https://carbon.greenly.earth/apps/Client%20App%20-%20Employees/Employees?_embed=true',
   'https://carbon.greenly.earth/apps/Client%20App%20-%20File%20Uploader/Greenly%20-%20Data%20-%20File%20Uploader?_embed=true',

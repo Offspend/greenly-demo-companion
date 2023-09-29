@@ -10,6 +10,6 @@
   "background": {
     "service_worker": "dist/service-worker.js"
   },
-  "permissions": ["tabs", "tabGroups", "activeTab", "scripting", "history"],
-  "host_permissions": ["<all_urls>"]
+  "permissions": ["tabs", "tabGroups", "activeTab", "scripting"],
+  "host_permissions": ["https://carbon.greenly.earth/*"]
 }

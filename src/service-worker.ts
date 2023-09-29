@@ -6,7 +6,7 @@
 const GREENLY_SAAS_URL = 'carbon.greenly.earth'
 
 async function getOpenGreenlyTabs():Promise<chrome.tabs.Tab[]> {
-  const allTabs = await chrome.tabs.query({ url: "<all_urls>" });
+  const allTabs = await chrome.tabs.query({ url: `https://${GREENLY_SAAS_URL}/*` });
   return allTabs.filter((tab) => tab.url?.includes(GREENLY_SAAS_URL));
 }
 

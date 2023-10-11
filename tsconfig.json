@@ -4,6 +4,7 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
-    "types": ["chrome"]
+    "types": ["chrome"],
+    "module": "umd"
   }
 }

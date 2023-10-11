@@ -3,6 +3,9 @@
 // It cannot access the DOM, it can access the chrome.tabs API.
 // The purpose of this worker is to give content-script.js access to the chrome.tabs API.
 
+const segmentUrl = 'https://api.segment.io/v1/track'
+const segmentAuthToken = 'V3QwTmJadUI2bEczaXB1UmRpRFRXVDNveG5NeVZnR1E6'
+const segmentUserId = 'Greenly Demo Companion'
 const GREENLY_SAAS_URL = 'carbon.greenly.earth'
 
 async function getOpenGreenlyTabs():Promise<chrome.tabs.Tab[]> {
@@ -52,3 +55,47 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     }
   }
 })
+
+chrome.runtime.onMessage.addListener(
+  async function(request, sender, sendResponse) {
+    console.log(sender.tab ?
+                "from a content script:" + sender.tab.url :
+                "from the extension");
+    if (request.event) {
+      const res = await sendEventToSegment(request.event)
+      if (!res) {
+        sendResponse({result: 'request aborted'})
+        return
+      }
+      const jsonRes = await res.json();
+      console.log(jsonRes)
+      sendResponse({result: jsonRes});
+    }
+    sendResponse({result: 'unknown request'})
+  }
+);
+
+async function sendEventToSegment (event: string) {
+  console.log(`Sending event to Segment.io: ${event}`)
+  const headers = new Headers()
+  headers.append('Authorization', `Basic ${segmentAuthToken}`);
+  headers.append('Content-Type', 'application/json');
+  try {
+    return await fetch(segmentUrl, {
+      method: 'POST',
+      headers,
+      mode: 'cors',
+      credentials: "include",
+      body: JSON.stringify({
+        userId: segmentUserId,
+        event,
+        properties: {
+          name: event,
+          from: 'Chrome Extension'
+        }
+      })
+    })
+  } catch (error) {
+    console.error(error)
+  } 
+}

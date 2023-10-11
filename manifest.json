@@ -11,5 +11,5 @@
     "service_worker": "dist/service-worker.js"
   },
   "permissions": ["tabs", "tabGroups", "activeTab", "scripting"],
-  "host_permissions": ["https://carbon.greenly.earth/*"]
+  "host_permissions": ["https://carbon.greenly.earth/*", "https://api.segment.io/v1/*"]
 }

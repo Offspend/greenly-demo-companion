@@ -1,3 +1,5 @@
+
+
 const pageURLs = [
   'https://carbon.greenly.earth/apps/Client%20App%20-%20Dashboard/Greenly%20-%20Dashboard?_embed=true',
   'https://carbon.greenly.earth/apps/Client%20App%20-%20Company%20Information/Greenly%20-%20Data%20-%20Company%20Information?_embed=true',
@@ -22,11 +24,16 @@ const pageURLs = [
 
 const openURLsInTabs = async () => {
   console.log('Opening all URLs...')
+  await notifyAnalyticsService('Setup Btn Clicked');
   const tabs = await Promise.all(pageURLs.map(url => chrome.tabs.create({url})))
   const tabIds = tabs.map(t => t.id ? t.id : -1);
   console.log(`GreenlyDemoCompanion: Just opened the following tabs: ${tabIds.join(', ')}`)
   const group = await chrome.tabs.group({ tabIds });
   await chrome.tabGroups.update(group, { title: "Demo" });
+}
+
+const notifyAnalyticsService = async (event: string) => {
+  const response = await chrome.runtime.sendMessage({ event });
 }
 
 const setupBtn = document.getElementById('btn-setup');
